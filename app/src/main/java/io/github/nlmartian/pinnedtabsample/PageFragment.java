@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import io.github.nlmartian.pinnedtabsample.util.DensityUtil;
+
 public class PageFragment extends BaseScopeFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ARG_NUM = "arg_num";
@@ -47,7 +49,13 @@ public class PageFragment extends BaseScopeFragment implements SwipeRefreshLayou
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(0xff00ffff, 0xffff00ff, 0xffffff00, 0xffffffff);
+        int startOffet = getResources().getDimensionPixelSize(R.dimen.headerHeight);
+        int endOffet = getResources().getDimensionPixelSize(R.dimen.headerHeight)
+                + DensityUtil.dip2px(getActivity(), 40f);
+        swipeRefreshLayout.setProgressViewOffset(true, startOffet, endOffet);
         swipeRefreshLayout.setOnRefreshListener(this);
+
         listBg = view.findViewById(R.id.list_bg_white);
         listView = (ListView) view.findViewById(R.id.listview);
         setupListView();
@@ -56,6 +64,18 @@ public class PageFragment extends BaseScopeFragment implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
+        delayHideRefreshEffect();
+    }
+
+    @Override
+    protected void loadMore() {
+        super.loadMore();
+        swipeRefreshLayout.setRefreshing(true);
+
+        delayHideRefreshEffect();
+    }
+
+    private void delayHideRefreshEffect() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

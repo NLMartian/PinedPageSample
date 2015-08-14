@@ -100,8 +100,11 @@ public class BaseScopeFragment extends Fragment implements ScrollTabHolder,
         previous = firstVisibleItem;
 
         if (totalItemCount == firstVisibleItem + visibleItemCount && moveToBottom) {
-            // TODO: 加载更多
-            swipeRefreshLayout.setRefreshing(true);
+            loadMore();
         }
+    }
+
+    protected void loadMore() {
+
     }
 }
